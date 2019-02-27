@@ -12,10 +12,12 @@
 							</div>
 							<div class="col-md-3">
 								<div class="floating-label select-label mt-1">
-									<select class="floating-select" (click)="test($event)" onclick="this.setAttribute('value', this.value);" value="">
+									<select class="floating-select" [(ngModel)]="demId" (ngModelChange)="demIdChange()" onclick="this.setAttribute('value', this.value);"
+									 value="">
 										<option value=""></option>
-										<option>sbi-dem0</option>
-										<option>ic-dem0</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
 										<option>15</option>
 									</select>
 									<label>Data Exchange Module ID</label>
@@ -24,8 +26,8 @@
 							<div class="col-md-3">
 
 								<div class="floating-label input-group mt-1">
-									<input type='text' class="floating-input form-control" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()"
-									 placeholder=" " />
+									<input type='text' (dateSelect)="onDateSelect($event)" class="floating-input form-control" ngbDatepicker #d1="ngbDatepicker"
+									 (click)="d1.toggle()" placeholder=" " />
 									<div class="input-group-append">
 										<span class="input-group-text">
 											<span class="fa fa-calendar-o" (click)="d1.toggle()"></span>
@@ -36,15 +38,7 @@
 								</div>
 							</div>
 						</div>
-
-
-
 					</div>
-
-					<!--Tabs Starts-->
-					<!--  -->
-
-
 					<section id="tabs">
 						<div class="row">
 							<div class="col-sm-12">
@@ -56,355 +50,288 @@
 								<div class="card">
 									<div class="card-body" style="margin-top: -36px;">
 										<div class="card-block">
-											<ul class="nav nav-pills">
-												<li (click)="outwardfile()" class="active"><a data-toggle="pill" href="#home">Outward Files</a></li>
-												<li  (click)="outwardfile()"><a data-toggle="pill" href="#menu1">Inward Files</a></li>
-												<li  (click)="outwardfile()"><a data-toggle="pill" href="#menu2">Outward Returns</a></li>
-												<li  (click)="outwardfile()"><a data-toggle="pill" href="#menu3">Inward Returns</a></li>
-											</ul>
-											<div class="tab-content">
-												<div id="home" class="tab-pane fade in active">
-													<h3>Outward Files</h3>
-													<table datatable [dtOptions]="dtOptions1" [dtTrigger]="dtTrigger1" class="row-border hover">
-														<thead>
-															<tr>
-																<th>ID</th>
-																<th>First name</th>
-																<th>Last name</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr *ngFor="let x of tableResponse">
-																<td>{{x.name}}</td>
-																<td>{{x.capital}}</td>
-																<td>{{x.region}}</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-												<div id="menu1" class="tab-pane fade">
-													<h3>Inward Files</h3>
-													<table datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2" class="row-border hover">
-														<thead>
-															<tr>
-																<th>ID</th>
-																<th>First name</th>
-																<th>Last name</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr *ngFor="let x of tableResponse">
-																<td>{{x.name}}</td>
-																<td>{{x.capital}}</td>
-																<td>{{x.region}}</td>
-															</tr>
-														</tbody>
-													</table>
+											<ngb-tabset>
+												<ngb-tab id="outwardFile">
+													<ng-template ngbTabTitle>
+														<div (click)="outwardfile()">Outward Files</div>
+													</ng-template>
+													<ng-template ngbTabContent>
+														<mat-card>
+															<div class="example-container mat-elevation-z8">
 
-												</div>
-												<div id="menu2" class="tab-pane fade">
-													<h3>Outward Returns</h3>
-													<table datatable [dtOptions]="dtOptions3" [dtTrigger]="dtTrigger3" class="row-border hover">
-														<thead>
-															<tr>
-																<th>ID</th>
-																<th>First name</th>
-																<th>Last name</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr *ngFor="let x of tableResponse">
-																<td>{{x.name}}</td>
-																<td>{{x.capital}}</td>
-																<td>{{x.region}}</td>
-															</tr>
-														</tbody>
-													</table>
+																<mat-form-field style="width:100%;">
+																	<input matInput (keyup)="Filter($event.target.value)" placeholder="Filter">
+																</mat-form-field>
 
-												</div>
-												<div id="menu3" class="tab-pane fade">
-													<h3>Inward Returns</h3>
-													<table datatable [dtOptions]="dtOptions4" [dtTrigger]="dtTrigger4" class="row-border hover">
-														<thead>
-															<tr>
-																<th>ID</th>
-																<th>First name</th>
-																<th>Last name</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr *ngFor="let x of tableResponse">
-																<td>{{x.name}}</td>
-																<td>{{x.capital}}</td>
-																<td>{{x.region}}</td>
-															</tr>
-														</tbody>
-													</table>
+																<mat-table #Table [dataSource]="MyDataSource" matSort>
+																	<!-- <ng-container >
+																		<mat-header-cell *matHeaderCellDef mat-sort-header> index</mat-header-cell>
+																		<mat-cell *matCellDef="let outwardData; let i = index;"> {{i}} </mat-cell>
+																	</ng-container> -->
 
-												</div>
-											</div>
-												</div>
+
+																	<ng-container matColumnDef="sessionType">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>Session Id</mat-header-cell>
+																		<mat-cell *matCellDef="let outwardData;let i = index"> {{i+1}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="fileType">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>File Type</mat-header-cell>
+																		<mat-cell *matCellDef="let outwardData"> {{outwardData.fileType}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="direction">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>Direction</mat-header-cell>
+																		<mat-cell *matCellDef="let outwardData"> {{outwardData.direction}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="ctscount">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>CTS</mat-header-cell>
+																		<mat-cell *matCellDef="let outwardData"> {{outwardData.ctscount}} </mat-cell>
+																	</ng-container>
+
+																	<ng-container matColumnDef="cchcount">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>CCH</mat-header-cell>
+																		<mat-cell *matCellDef="let outwardData"> {{outwardData.cchcount}} </mat-cell>
+																	</ng-container>
+
+
+																	<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+																	<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+																</mat-table>
+
+
+																<mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+																</mat-paginator>
+															</div>
+														</mat-card>
+													</ng-template>
+												</ngb-tab>
+												<ngb-tab id="inwardFile">
+													<ng-template ngbTabTitle>
+														<div (click)="inwardfile()">Inward Files</div>
+													</ng-template>
+													<ng-template ngbTabContent>
+														<mat-card>
+															<div class="example-container mat-elevation-z8">
+
+																<mat-form-field style="width:100%;">
+																	<input matInput (keyup)="Filter($event.target.value)" placeholder="Filter">
+																</mat-form-field>
+
+																<mat-table #Table [dataSource]="MyDataSource" matSort>
+
+
+																	<ng-container matColumnDef="sessionType">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>Session Id</mat-header-cell>
+																		<mat-cell *matCellDef="let inwardData;let i=index"> {{i+1}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="fileType">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>File Type</mat-header-cell>
+																		<mat-cell *matCellDef="let inwardData"> {{inwardData.fileType}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="direction">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>Direction</mat-header-cell>
+																		<mat-cell *matCellDef="let inwardData"> {{inwardData.direction}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="ctscount">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>CTS</mat-header-cell>
+																		<mat-cell *matCellDef="let inwardData"> {{inwardData.ctscount}} </mat-cell>
+																	</ng-container>
+
+																	<ng-container matColumnDef="cchcount">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>CCH</mat-header-cell>
+																		<mat-cell *matCellDef="let inwardData"> {{inwardData.cchcount}} </mat-cell>
+																	</ng-container>
+
+																	<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+																	<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+																</mat-table>
+
+
+																<mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+																</mat-paginator>
+															</div>
+														</mat-card>
+													</ng-template>
+												</ngb-tab>
+												<ngb-tab id="outwardreturns">
+													<ng-template ngbTabTitle>
+														<div (click)="outwardreturns()">outward returns</div>
+													</ng-template>
+													<ng-template ngbTabContent>
+														<mat-card>
+															<div class="example-container mat-elevation-z8">
+
+																<mat-form-field style="width:100%;">
+																	<input matInput (keyup)="Filter($event.target.value)" placeholder="Filter">
+																</mat-form-field>
+
+																<mat-table #Table [dataSource]="MyDataSource" matSort>
+
+
+																	<ng-container matColumnDef="sessionType">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>Session Id</mat-header-cell>
+																		<mat-cell *matCellDef="let outwardreturns;let i=index"> {{i+1}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="fileType">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>File Type</mat-header-cell>
+																		<mat-cell *matCellDef="let outwardreturns"> {{outwardreturns.fileType}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="direction">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>Direction</mat-header-cell>
+																		<mat-cell *matCellDef="let outwardreturns"> {{outwardreturns.direction}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="ctscount">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>CTS</mat-header-cell>
+																		<mat-cell *matCellDef="let outwardreturns"> {{outwardreturns.ctscount}} </mat-cell>
+																	</ng-container>
+
+																	<ng-container matColumnDef="cchcount">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>CCH</mat-header-cell>
+																		<mat-cell *matCellDef="let outwardreturns"> {{outwardreturns.cchcount}} </mat-cell>
+																	</ng-container>
+
+																	<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+																	<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+																</mat-table>
+
+
+																<mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+																</mat-paginator>
+															</div>
+														</mat-card>
+													</ng-template>
+												</ngb-tab>
+												<ngb-tab id="inwardreturns">
+													<ng-template ngbTabTitle>
+														<div (click)="inwardreturns()">Inward returns</div>
+													</ng-template>
+													<ng-template ngbTabContent>
+														<mat-card>
+															<div class="example-container mat-elevation-z8">
+
+																<mat-form-field style="width:100%;">
+																	<input matInput (keyup)="Filter($event.target.value)" placeholder="Filter">
+																</mat-form-field>
+
+																<mat-table #Table [dataSource]="MyDataSource" matSort>
+
+
+																	<ng-container matColumnDef="sessionType">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>Session Id</mat-header-cell>
+																		<mat-cell *matCellDef="let inwardreturns;let i=index"> {{i+1}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="fileType">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>File Type</mat-header-cell>
+																		<mat-cell *matCellDef="let inwardreturns"> {{inwardreturns.fileType}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="direction">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>Direction</mat-header-cell>
+																		<mat-cell *matCellDef="let inwardreturns"> {{inwardreturns.direction}} </mat-cell>
+																	</ng-container>
+
+
+																	<ng-container matColumnDef="ctscount">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>CTS</mat-header-cell>
+																		<mat-cell *matCellDef="let inwardreturns"> {{inwardreturns.ctscount}} </mat-cell>
+																	</ng-container>
+
+																	<ng-container matColumnDef="cchcount">
+																		<mat-header-cell *matHeaderCellDef mat-sort-header>CCH</mat-header-cell>
+																		<mat-cell *matCellDef="let inwardreturns"> {{inwardreturns.cchcount}} </mat-cell>
+																	</ng-container>
+
+																	<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+																	<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+																</mat-table>
+
+
+																<mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+																</mat-paginator>
+															</div>
+														</mat-card>
+													</ng-template>
+											
+												</ngb-tab>
+
+											</ngb-tabset>
+										</div>
 									</div>
 								</div>
 							</div>
-							<!--Tabset Ends-->
 						</div>
 					</section>
-					<!-- <div class="card-body">
-						<div class="px-2">
-							<div class="form-body">
-								<div class="card-block">
-									<div class="row">
-										<div class="col-lg-3">
-										<div class="">
-											<div class="list-group list-group-messages">
-												<a class="list-group-item list-group-item-action no-border" (click)="outwordfile()">
-													<i class="ft-inbox mr-2"></i> Outward Files 
-												</a>
-												<a class="list-group-item list-group-item-action no-border" (click)="Inwardfile()">
-													<i class="fa fa-inbox mr-2"></i> Inward Files
-												</a>
-												<a class="list-group-item list-group-item-action no-border" (click)="outwardreturn()">
-													<i class="fa fa-inbox mr-2"></i> Outward Returns 
-												</a>
-												<a class="list-group-item list-group-item-action no-border" (click)="inwardreturn()">
-													<i class="ft-inbox mr-2"></i> Inward Returns 
-												</a>
-												
-											</div>
-										</div>
-									
-										
-									</div>
-											<div class="col-md-9" [hidden]="!inwordfileshow">
-												<div class="px-3">
-														<div class="content-header">Inward Files  </div> 
-												  
-														<table class="table table-bordered mt-3">
-															<tr>
-															  <th rowspan="2"><br />C/L Type</th>
-															  <th rowspan="2"><br />Session </th>
-															  <th rowspan="2"><br />File Type </th> 
-															   <th colspan="2" class="text-center">Received files</th>
-															</tr>
-															<tr>                                
-															  <td>Files received from CCH</td>
-															  <td>Files sent to CTS</td> 
-															</tr>
-															<tr>
-																<td>11, CTS Clearing</td>
-																<td><a href="#" >1</a></td>
-																<td class="text-warning">PXF</td>
-																<td><a href="#" >100</a></td>
-																<td><a href="#" >100</a></td> 
-															</tr>
-															<tr>
-																<td></td>
-																<td><a href="#" ></a></td>
-																<td class="text-warning">PIBF</td>
-																<td><a href="#" >100</a></td>
-																<td><a href="#" >100</a></td> 
-															</tr>
-															 
-															<tr>
-																<td>11, CTS Clearing</td>
-																<td><a href="#" >1</a></td>
-																<td class="text-warning">PXF</td>
-																<td><a href="#" >100</a></td>
-																<td><a href="#" >100</a></td> 
-															</tr>
-															<tr>
-																<td></td>
-																<td><a href="#" ></a></td>
-																<td class="text-warning">PIBF</td>
-																<td><a href="#" >100</a></td>
-																<td><a href="#" >100</a></td> 
-															</tr>
-													  </table>
-													
-											  </div>
-											</div>
-											<div class="col-md-9" [hidden]="!outwordfileshow">
-												<div class="px-3">
-														<div class="content-header">Outward Files</div> 
-												  
-														<table class="table table-bordered mt-3">
-																<tr>
-																 <th rowspan="2"><br />C/L Type</th>
-																 <th rowspan="2"><br />Session </th>
-																 <th rowspan="2"><br />File Type </th>
-																 <th colspan="2" class="text-center">Sent files</th>
-																  <th colspan="2" class="text-center">Received files</th>
-															   </tr>
-															   <tr>
-																 
-																 <td>Files received from CTS</td>
-																 <td>Files sent to CCH</td>
-																 <td>Response(RES)</td>
-																 <td>Acknowledgement(OACK)</td>
-															   </tr>
-															   <tr>
-																   <td>11, CTS Clearing</td>
-																   <td><a href="detail.html" >1</a></td>
-																   <td class="text-warning">CXF</td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-															   </tr>
-															   <tr>
-																   <td></td>
-																   <td><a href="#" ></a></td>
-																   <td class="text-warning">CIBF</td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-															   </tr>
-															   <tr>
-																   <td> </td>
-																   <td><a href="#" ></a></td>
-																   <td class="text-warning">Done</td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-															   </tr>
-															   <tr>
-																   <td>11, CTS Clearing</td>
-																   <td><a href="detail.html" >1</a></td>
-																   <td class="text-warning">CXF</td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-															   </tr>
-															   <tr>
-																   <td></td>
-																   <td><a href="#" ></a></td>
-																   <td class="text-warning">CIBF</td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-															   </tr>
-																<tr>
-																   <td></td>
-																   <td><a href="#" ></a></td>
-																   <td class="text-warning">DOne</td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-																   <td><a href="#" >100</a></td>
-															   </tr>
-								 
-								   
-														 </table>
-													
-											  </div>
-											</div>
-											<div class="col-md-9" [hidden]="!outwordreturnshow">
-												<div class="px-3">
-														<div class="content-header">Outward Returns  </div> 
-												  
-														<table class="table table-bordered mt-3">
-															<tr>
-															 <th rowspan="2"><br />C/L Type</th>
-															 <th rowspan="2"><br />Session </th>
-															 <th rowspan="2"><br />File Type </th>
-															 <th colspan="2">Sent files</th>
-															  <th colspan="2">Received files</th>
-														   </tr>
-														   <tr>
-															 
-															 <td>Files received from CTS</td>
-															 <td>Files sent to CCH</td>
-															 <td>Response(RES)</td>
-															 <td>Acknowledgement(OACK)</td>
-														   </tr>
-														   <tr>
-															   <td>11, CTS Clearing</td>
-															   <td><a href="detail.html" >1</a></td>
-															   <td class="text-warning">RRF</td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-														   </tr>							   
-														   <tr>
-															   <td> </td>
-															   <td><a href="#" ></a></td>
-															   <td class="text-warning">Done</td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-														   </tr>
-														   <tr>
-															   <td>11, CTS Clearing</td>
-															   <td><a href="detail.html" >1</a></td>
-															   <td class="text-warning">RRF</td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-														   </tr>
-															<tr>
-															   <td></td>
-															   <td><a href="#" ></a></td>
-															   <td class="text-warning">DOne</td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-															   <td><a href="#" >100</a></td>
-														   </tr>
-							 
-							   
-													 </table>
-													
-											  </div>
-											</div>
-											<div class="col-md-9" [hidden]="!inwardreturnshow">
-												<div class="px-3">
-														<div class="content-header">Inward Returns  </div> 
-												  
-														<table class="table table-bordered mt-3">
-															<tr>
-															  <th rowspan="2"><br />C/L Type</th>
-															  <th rowspan="2"><br />Session </th>
-															  <th rowspan="2"><br />File Type </th> 
-															   <th colspan="2" class="text-center">Sent files</th>
-															</tr>
-															<tr>                                
-															  <td>Files received from CCH</td>
-															  <td>Files sent to CTS</td> 
-															</tr>
-															<tr>
-																<td>11, CTS Clearing</td>
-																<td><a href="detail.html" >1</a></td>
-																<td class="text-warning">RF</td>
-																<td><a href="#" >100</a></td>
-																<td><a href="#" >100</a></td> 
-															</tr>
-															<tr>
-																<td>12, Non-CTS Clearing</td>
-																<td><a href="detail.html" >1</a></td>
-																<td class="text-warning">RF</td>
-																<td><a href="#" >100</a></td>
-																<td><a href="#" >100</a></td> 
-															</tr> 
-													  </table>
-													
-											  </div>
-											</div>
+					<!--Tabset Ends-->
 
-										</div>
-										
+					<div class="col-md-12" *ngIf="false">
+						<div class="px-3">
+							<div class="content-header">Details Session - 1 </div>
+
+							<table class="table table-bordered mt-3">
+								<tr>
+									<th colspan="2"><strong> Institution ID - 1090 </strong> </th>
+									<th colspan="3"> Date: 04 / 07 / 2018</th>
+								</tr>
+								<tr>
+									<th class="text-center">S NO</th>
+									<th>File Name </th>
+									<th>File Type </th>
+									<th>File Size </th>
+									<th class="text-center">Status</th>
+								</tr>
+								<tr>
+									<td class="text-center">1</td>
+									<td>CXF_14072018_00080.xml</td>
+									<td>CXF</td>
+									<td>100kb</td>
+									<td>File uploaded to CCH</td>
+								</tr>
+								<tr>
+									<td class="text-center">2</td>
+									<td>CXF_14072018_00081.xml</td>
+									<td>CXF</td>
+									<td>90kb</td>
+									<td>File uploaded to CCH</td>
+								</tr>
+								<tr>
+									<td class="text-center">3</td>
+									<td>CIBF_14072018_00080.xml</td>
+									<td>CXF</td>
+									<td>140kb</td>
+									<td>File uploaded to CCH</td>
+								</tr>
+								<tr>
+									<td class="text-center">4</td>
+									<td>CIBF_14072018_00080.xml</td>
+									<td>CXF</td>
+									<td>85kb</td>
+									<td>File uploaded to CCH</td>
+								</tr>
+							</table>
+
+						</div>
+					</div>
 									</div>
-									</div>
-								</div>
-							</div> -->
-				</div>
 			</div>
 		</div>
 	</section>

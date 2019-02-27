@@ -25,6 +25,9 @@ import { DashboardService } from './dashboard.service';
 import { AuthService } from './shared/auth/auth.service';
 import { AuthGuard } from './shared/auth/auth-guard.service';
 import {NgbDateFRParserFormatter} from "./ngb-date-fr-parser-formatter";
+import { MatToolbarModule , MatMenuModule , MatInputModule , MatTableModule ,MatButtonModule,MatCardModule,MatTableDataSource,MatPaginatorModule,MatSortModule} from '@angular/material';
+import { MatFormFieldModule } from '@angular/material';
+import { MatIconModule } from '@angular/material';
 
 import * as $ from 'jquery';
 
@@ -42,8 +45,8 @@ export function createTranslateLoader(http: HttpClient) {
         ContentLayoutComponent
     ],
     imports: [
-        BrowserAnimationsModule,
-        BrowserModule,
+        BrowserAnimationsModule,MatFormFieldModule,
+        BrowserModule,MatIconModule,
         StoreModule.forRoot({}),
         AppRoutingModule,
         SharedModule,
@@ -52,6 +55,8 @@ export function createTranslateLoader(http: HttpClient) {
         DataTablesModule,
         ToastModule.forRoot(),
         NgbModule.forRoot(),
+        MatToolbarModule , MatMenuModule , MatIconModule, MatInputModule , MatTableModule ,MatButtonModule,MatCardModule,MatPaginatorModule,MatSortModule,
+
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -63,6 +68,9 @@ export function createTranslateLoader(http: HttpClient) {
             apiKey: 'AIzaSyBr5_picK8YJK7fFR2CPzTVMj6GG1TtRGo'
         })
     ],
+    exports:[
+        MatToolbarModule , MatMenuModule ,MatFormFieldModule, MatIconModule, MatInputModule , MatTableModule ,MatButtonModule,MatCardModule,MatPaginatorModule,MatSortModule
+      ],
     providers: [
         //Toastr and auth providers
         { provide: ToastOptions, useClass: CustomOption },

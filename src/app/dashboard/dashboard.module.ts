@@ -6,9 +6,11 @@ import { ChartistModule } from 'ng-chartist';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatchHeightModule } from "../shared/directives/match-height.directive";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { DasboardhomeComponent } from './dasboardhome/dasboardhome.component';
+import { MatToolbarModule , MatMenuModule , MatInputModule , MatTableModule ,MatButtonModule,MatCardModule,MatTableDataSource,MatPaginatorModule,MatSortModule} from '@angular/material';
+import { MatFormFieldModule } from '@angular/material';
+import {MatIconModule} from '@angular/material/icon';
+
 //  import { Dashboard2Component } from "./dashboard2/dashboard2.component";
 
 
@@ -20,12 +22,14 @@ import { DasboardhomeComponent } from './dasboardhome/dasboardhome.component';
         NgbModule,
         DataTablesModule,
         FormsModule, ReactiveFormsModule,
-        MatchHeightModule
+        MatchHeightModule,
+        MatToolbarModule , MatMenuModule ,MatIconModule, MatInputModule , MatTableModule ,MatButtonModule,MatCardModule,MatPaginatorModule,MatSortModule,
+
     ],
-    exports: [],
+    exports: [MatToolbarModule ,MatIconModule, MatMenuModule ,MatFormFieldModule,  MatInputModule , MatTableModule ,MatButtonModule,MatCardModule,MatPaginatorModule,MatSortModule
+    ],
     declarations: [
         DashboardComponent,
-        DasboardhomeComponent,
         // Dashboard2Component
     ],
     providers: [],
